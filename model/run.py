@@ -44,5 +44,5 @@ def run(action, root_dir, data_key, model_key, save_path):
         print("Testing the model: {} with dataset: {}".format(model_key, data_key))
         model = torch.load(model_path)
         test_loader = DataLoader(dataset, batch_size=config.batch_size, shuffle=False)
-        loss, metrics = predict(model, test_loader, criterion)
-        log_pred_metrics(loss, metrics)
+        metrics = predict(model, test_loader, criterion)
+        log_pred_metrics(metrics)
