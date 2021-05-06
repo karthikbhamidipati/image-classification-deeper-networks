@@ -1,10 +1,10 @@
 from os.path import basename, abspath, dirname
 
-from network.resnet import resnet18, resnet34, resnet50, resnet101, resnet152
-
 from dataset.cifar10 import cifar10
 from dataset.cifar100 import cifar100
 from dataset.mnist import mnist
+from network.resnet import resnet18, resnet34, resnet50, resnet101, resnet152
+from network.vgg import vgg11, vgg13, vgg16, vgg19
 
 PROJECT_NAME = basename(dirname(dirname(abspath(__file__))))
 
@@ -19,7 +19,11 @@ NETWORKS = {
     "resnet34": resnet34,
     "resnet50": resnet50,
     "resnet101": resnet101,
-    "resnet152": resnet152
+    "resnet152": resnet152,
+    "vgg11": vgg11,
+    "vgg13": vgg13,
+    "vgg16": vgg16,
+    "vgg19": vgg19,
 }
 
 HYPER_PARAMETERS = {
