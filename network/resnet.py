@@ -1,10 +1,14 @@
-import torchvision.models as models
 from torch.nn import Conv2d, Linear
+from torchvision import models
 
 
 def _get_resnet_model(resnet_model, input_filters, num_classes):
-    resnet_model.conv1 = Conv2d(input_filters, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False)
-    resnet_model.fc = Linear(in_features=resnet_model.fc.in_features, out_features=num_classes, bias=True)
+    conv1 = resnet_model.conv1
+    fc = resnet_model.fc
+    resnet_model.conv1 = Conv2d(input_filters, conv1.out_channels, kernel_size=conv1.kernel_size,
+                                stride=conv1.stride, padding=conv1.padding, bias=False)
+    resnet_model.fc = Linear(in_features=fc.in_features, out_features=num_classes,
+                             bias=True)
     return resnet_model
 
 
