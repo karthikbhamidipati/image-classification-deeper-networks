@@ -6,9 +6,10 @@ from torch.nn import CrossEntropyLoss
 from torch.optim import Adam
 from torch.utils.data import random_split, DataLoader
 
+from model import run_device
 from model.config import DATA_SOURCES, NETWORKS, PROJECT_NAME, HYPER_PARAMETERS
 from model.predict import predict, log_pred_metrics
-from train import train
+from model.train import train
 
 
 def init_wandb_session(run_name, action):
@@ -35,6 +36,7 @@ def run(action, root_dir, data_key, model_key, save_path):
     if training:
         print("Training the model: {} with dataset: {}".format(model_key, data_key))
         model = NETWORKS[model_key](input_filters=dataset[0][0].shape[0], num_classes=len(dataset.classes))
+        model.to(run_device)
         train_set, val_set = random_split(dataset, (int(0.8 * dataset_len), int(0.2 * dataset_len)))
         train_loader = DataLoader(train_set, batch_size=config.batch_size, shuffle=True)
         val_loader = DataLoader(val_set, batch_size=config.batch_size, shuffle=False)
