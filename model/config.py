@@ -1,6 +1,6 @@
 from os.path import basename, abspath, dirname
 
-from torchvision.models import resnet18, resnet34, resnet50, resnet101, resnet152
+from network.resnet import resnet18, resnet34, resnet50, resnet101, resnet152
 
 from dataset.cifar10 import cifar10
 from dataset.cifar100 import cifar100

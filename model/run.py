@@ -34,7 +34,7 @@ def run(action, root_dir, data_key, model_key, save_path):
 
     if training:
         print("Training the model: {} with dataset: {}".format(model_key, data_key))
-        model = NETWORKS[model_key]()
+        model = NETWORKS[model_key](input_filters=dataset[0][0].shape[0], num_classes=len(dataset.classes))
         train_set, val_set = random_split(dataset, (int(0.8 * dataset_len), int(0.2 * dataset_len)))
         train_loader = DataLoader(train_set, batch_size=config.batch_size, shuffle=True)
         val_loader = DataLoader(val_set, batch_size=config.batch_size, shuffle=False)
