@@ -16,7 +16,7 @@ def main():
                               help="name of the dataset")
     train_parser.add_argument("-m", "--model-name", dest="model_key", required=True,
                               help="model to be used for training")
-    train_parser.add_argument("-s", "--save-path", dest="model_path", required=True,
+    train_parser.add_argument("-s", "--save-path", dest="save_path", required=True,
                               help="save path for trained model")
 
     # args for testing
@@ -27,7 +27,7 @@ def main():
                              help="name of the dataset")
     test_parser.add_argument("-m", "--model-name", dest="model_key", required=True,
                              help="model to be used for testing")
-    test_parser.add_argument("-s", "--save-path", dest="model_path", required=True,
+    test_parser.add_argument("-s", "--save-path", dest="save_path", required=True,
                              help="save path of the trained model")
 
     run(**vars(parser.parse_args()))
