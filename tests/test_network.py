@@ -1,3 +1,4 @@
+import logging
 import os
 import unittest
 from os.path import join, dirname, abspath
@@ -16,7 +17,7 @@ class TestNetwork(unittest.TestCase):
             os.mkdir(cls.root_dir)
         cls.datasets = dict()
         for name, dataset in DATA_SOURCES.items():
-            print("Downloading {} dataset before running tests".format(name))
+            logging.info("Downloading {} dataset before running tests".format(name))
             cls.datasets[name] = dataset(root_dir=cls.root_dir, train=True)
 
     @parameterized.expand(NETWORKS.keys())

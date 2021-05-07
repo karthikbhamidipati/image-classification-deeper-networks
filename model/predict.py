@@ -1,3 +1,5 @@
+import logging
+
 import torch
 import wandb
 
@@ -20,5 +22,5 @@ def predict(model, data_loader, criterion):
 
 
 def log_pred_metrics(metrics):
-    print("Test stats: {}".format(metrics))
+    logging.info("Test stats: {}".format(metrics))
     wandb.log({'test': metrics})

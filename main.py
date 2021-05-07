@@ -1,6 +1,12 @@
+import logging
 from argparse import ArgumentParser
 
 from model.run import run
+
+
+def init_logger():
+    logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
+                      datefmt='%Y-%m-%d %H:%M:%S')
 
 
 def main():
@@ -30,6 +36,9 @@ def main():
     test_parser.add_argument("-s", "--save-path", dest="save_path", required=True,
                              help="save path of the trained model")
 
+    args_dict = vars(parser.parse_args())
+    init_logger()
+    logging.info(f'User Arguments: {args_dict}!!!')
     run(**vars(parser.parse_args()))
 
 

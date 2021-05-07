@@ -14,7 +14,7 @@ class Metrics:
 
     def update(self, loss, prediction, ground_truth):
         self.loss = self._compute_moving_average(self.loss, loss.cpu().item())
-        self._update_metrics(prediction.cpu().numpy(), ground_truth.cpu().numpy())
+        self._update_metrics(prediction.detach().cpu().numpy(), ground_truth.detach().cpu().numpy())
         self._n += 1
 
     def _compute_moving_average(self, prev, curr):

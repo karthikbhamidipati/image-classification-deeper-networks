@@ -1,3 +1,5 @@
+import logging
+from os import makedirs
 from os.path import join
 
 import torch
@@ -34,16 +36,17 @@ def run(action, root_dir, data_key, model_key, save_path):
     model_path = join(save_path, run_name + '.pt')
 
     if training:
-        print("Training the model: {} with dataset: {}".format(model_key, data_key))
+        logging.info("Training the model: {} with dataset: {}".format(model_key, data_key))
         model = NETWORKS[model_key](input_filters=dataset[0][0].shape[0], num_classes=len(dataset.classes))
         model.to(run_device)
         train_set, val_set = random_split(dataset, (int(0.8 * dataset_len), int(0.2 * dataset_len)))
         train_loader = DataLoader(train_set, batch_size=config.batch_size, shuffle=True)
         val_loader = DataLoader(val_set, batch_size=config.batch_size, shuffle=False)
         optimizer = Adam(model.parameters(), lr=config.learning_rate)
+        makedirs(save_path, exist_ok=True)
         train(model, train_loader, val_loader, criterion, optimizer, config.num_epochs, model_path)
     else:
-        print("Testing the model: {} with dataset: {}".format(model_key, data_key))
+        logging.info("Testing the model: {} with dataset: {}".format(model_key, data_key))
         model = torch.load(model_path)
         test_loader = DataLoader(dataset, batch_size=config.batch_size, shuffle=False)
         metrics = predict(model, test_loader, criterion)
