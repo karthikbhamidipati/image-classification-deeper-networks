@@ -1,3 +1,5 @@
+import logging
+
 import torch
 import wandb
 from numpy import Inf
@@ -20,7 +22,7 @@ def train_model(model, train_loader, criterion, optimizer):
         loss.backward()
         optimizer.step()
 
-        metrics.update(loss.item(), output, label)
+        metrics.update(loss, output, label)
 
     return metrics.asdict()
 
@@ -40,7 +42,7 @@ def train(model, train_loader, val_loader, criterion, optimizer, num_epochs, mod
 
 def save_model(model, model_path, val_loss, val_loss_min):
     if val_loss <= val_loss_min:
-        print("Validation loss decreased ({:.6f} --> {:.6f}).  Saving model ...".format(val_loss_min, val_loss))
+        logging.info("Validation loss decreased ({:.6f} --> {:.6f}).  Saving model ...".format(val_loss_min, val_loss))
         torch.save(model, model_path)
 
     return min(val_loss, val_loss_min)
@@ -49,7 +51,7 @@ def save_model(model, model_path, val_loss, val_loss_min):
 def log_metrics(epoch, train_metrics, val_metrics):
     wandb.log({'train': train_metrics}, step=epoch)
     wandb.log({'val': val_metrics}, step=epoch)
-    print("Epoch: {}\n\t"
-          "Train stats: {}\n\t"
-          "Val stats: {}\n\t"
-          .format(epoch, train_metrics, val_metrics))
+    logging.info("Epoch: {}\n\t"
+                 "Train stats: {}\n\t"
+                 "Val stats: {}\n\t"
+                 .format(epoch, train_metrics, val_metrics))
