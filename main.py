@@ -1,12 +1,24 @@
 import logging
 from argparse import ArgumentParser
+from logging.handlers import RotatingFileHandler
+from sys import stdout
 
+from model.config import PROJECT_NAME
 from model.run import run
 
 
 def init_logger():
-    logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
-                      datefmt='%Y-%m-%d %H:%M:%S')
+    log = logging.getLogger('')
+    log.setLevel(logging.DEBUG)
+    formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+
+    ch = logging.StreamHandler(stdout)
+    ch.setFormatter(formatter)
+    log.addHandler(ch)
+
+    fh = RotatingFileHandler(PROJECT_NAME + ".log", maxBytes=(1048576 * 5), backupCount=7)
+    fh.setFormatter(formatter)
+    log.addHandler(fh)
 
 
 def main():
