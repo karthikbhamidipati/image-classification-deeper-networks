@@ -38,7 +38,7 @@ def main():
 
     args_dict = vars(parser.parse_args())
     init_logger()
-    logging.debug(f'User Arguments: {args_dict}!!!')
+    logging.info(f'User Arguments: {args_dict}!!!')
     run(**vars(parser.parse_args()))
 
 
