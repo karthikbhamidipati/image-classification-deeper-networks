@@ -1,22 +1,27 @@
 import logging
 from argparse import ArgumentParser
 from logging.handlers import RotatingFileHandler
+from os import makedirs
+from os.path import join, dirname
 from sys import stdout
 
 from model.config import PROJECT_NAME
 from model.run import run
 
 
-def init_logger():
+def init_logger(args):
+    logging.getLogger("torch").setLevel(logging.ERROR)
     log = logging.getLogger('')
-    log.setLevel(logging.DEBUG)
+    log.setLevel(logging.INFO)
     formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 
     ch = logging.StreamHandler(stdout)
     ch.setFormatter(formatter)
     log.addHandler(ch)
 
-    fh = RotatingFileHandler(PROJECT_NAME + ".log", maxBytes=(1048576 * 5), backupCount=7)
+    log_file_path = join("logs", PROJECT_NAME, '_'.join((args['model_key'], args['data_key'] + ".log")))
+    makedirs(dirname(log_file_path), exist_ok=True)
+    fh = RotatingFileHandler(log_file_path + "", maxBytes=(1048576 * 5), backupCount=7)
     fh.setFormatter(formatter)
     log.addHandler(fh)
 
@@ -49,7 +54,7 @@ def main():
                              help="save path of the trained model")
 
     args_dict = vars(parser.parse_args())
-    init_logger()
+    init_logger(args_dict)
     logging.info(f'User Arguments: {args_dict}!!!')
     run(**vars(parser.parse_args()))
 
