@@ -133,3 +133,10 @@ dmypy.json
 
 # test data
 tests/data
+tests/model
+
+# log files
+logs/
+
+# wandb files
+wandb/
