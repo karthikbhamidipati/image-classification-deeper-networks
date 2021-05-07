@@ -28,7 +28,7 @@ def train_model(model, train_loader, criterion, optimizer):
 
 
 def train(model, train_loader, val_loader, criterion, optimizer, num_epochs, model_path):
-    wandb.watch(model, log='all')
+    # wandb.watch(model, log='all')
     val_loss_min = Inf
 
     for epoch in range(num_epochs):
