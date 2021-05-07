@@ -1,5 +1,6 @@
 import os
 import unittest
+from os.path import join, dirname, abspath
 
 from parameterized import parameterized
 from torch.utils.data import DataLoader
@@ -10,7 +11,7 @@ from model.config import NETWORKS, DATA_SOURCES
 class TestNetwork(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.root_dir = "data"
+        cls.root_dir = join(dirname(abspath(__file__)), "data")
         if not os.path.exists(cls.root_dir):
             os.mkdir(cls.root_dir)
         cls.datasets = dict()
