@@ -31,7 +31,7 @@ def train(model, train_loader, val_loader, criterion, optimizer, num_epochs, mod
     # wandb.watch(model, log='all')
     val_loss_min = Inf
 
-    for epoch in range(num_epochs):
+    for epoch in range(1, num_epochs + 1):
         train_metrics = train_model(model, train_loader, criterion, optimizer)
         val_metrics = predict(model, val_loader, criterion)
         log_metrics(epoch, train_metrics, val_metrics)
