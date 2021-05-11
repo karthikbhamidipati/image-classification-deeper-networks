@@ -3,6 +3,7 @@ from os.path import basename, abspath, dirname
 from dataset.cifar10 import cifar10
 from dataset.cifar100 import cifar100
 from dataset.mnist import mnist
+from network.googlenet import googlenet
 from network.resnet import resnet18, resnet34, resnet50, resnet101, resnet152
 from network.vgg import vgg11, vgg13, vgg16, vgg19
 
@@ -24,10 +25,11 @@ NETWORKS = {
     "vgg13": vgg13,
     "vgg16": vgg16,
     "vgg19": vgg19,
+    "googlenet": googlenet
 }
 
 HYPER_PARAMETERS = {
-    'num_epochs': 15,  # number of epochs
+    'num_epochs': 10,  # number of epochs
     'batch_size': 512,  # batch size
     'learning_rate': 0.001,  # learning rate
 }
