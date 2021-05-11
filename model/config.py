@@ -29,7 +29,7 @@ NETWORKS = {
 }
 
 HYPER_PARAMETERS = {
-    'num_epochs': 15,  # number of epochs
+    'num_epochs': 10,  # number of epochs
     'batch_size': 512,  # batch size
     'learning_rate': 0.001,  # learning rate
 }
