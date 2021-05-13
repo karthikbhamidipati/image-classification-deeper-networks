@@ -5,6 +5,7 @@ from os.path import join, dirname, abspath
 
 from parameterized import parameterized
 from torch.utils.data import DataLoader
+from torchvision.models import GoogLeNetOutputs
 
 from model.config import NETWORKS, DATA_SOURCES
 
@@ -27,13 +28,16 @@ class TestNetwork(unittest.TestCase):
             num_classes = len(dataset.classes)
             data, _ = next(iter(DataLoader(dataset, batch_size=4)))
             model = NETWORKS[name](input_filters, num_classes)
-            output = model(data)
-            self.assertEqual(output.shape[0], 4,
-                             "Incorrect output batch size for model: {}, dataset: {}"
-                             .format(name, dataset_name))
-            self.assertEqual(output.shape[1], num_classes,
-                             "Incorrect output batch size for model: {}, dataset: {}"
-                             .format(name, dataset_name))
+            outputs = model(data)
+            if not isinstance(outputs, GoogLeNetOutputs):
+                outputs = [outputs]
+            for output in outputs:
+                self.assertEqual(output.shape[0], 4,
+                                 "Incorrect output batch size for model: {}, dataset: {}"
+                                 .format(name, dataset_name))
+                self.assertEqual(output.shape[1], num_classes,
+                                 "Incorrect output batch size for model: {}, dataset: {}"
+                                 .format(name, dataset_name))
 
 
 if __name__ == '__main__':
