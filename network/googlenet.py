@@ -1,4 +1,4 @@
-from torch.nn import Conv2d, Linear
+from torch.nn import Conv2d, Linear, DataParallel
 from torchvision import models
 
 
@@ -12,7 +12,7 @@ def _get_googlenet_model(googlenet_model, input_filters, num_classes):
                                       bias=True)
     googlenet_model.fc = Linear(in_features=1024, out_features=num_classes,
                                 bias=True)
-    return googlenet_model
+    return DataParallel(googlenet_model)
 
 
 def googlenet(input_filters, num_classes):
