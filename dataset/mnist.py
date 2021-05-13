@@ -5,13 +5,27 @@ from torchvision.datasets import MNIST
 
 
 def mnist(root_dir, train):
-    transform = transforms.Compose(
+    # Normalize the training set with augmentation
+    transform_train = transforms.Compose(
+        [
+            transforms.RandomCrop(32, padding=4),
+            transforms.RandomHorizontalFlip(),
+            transforms.ToTensor(),
+            transforms.Resize((32, 32)),
+            transforms.Normalize(0.406, 0.225, inplace=True)
+        ]
+    )
+
+    # Normalize the test set same as training set without augmentation
+    transform_test = transforms.Compose(
         [
             transforms.ToTensor(),
             transforms.Resize((32, 32)),
             transforms.Normalize(0.406, 0.225, inplace=True)
         ]
     )
+
+    transform = transform_train if train else transform_test
 
     opener = urllib.request.URLopener()
     opener.addheader('User-Agent',

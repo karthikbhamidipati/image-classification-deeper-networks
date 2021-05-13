@@ -5,7 +5,8 @@ from os.path import join
 import torch
 import wandb
 from torch.nn import CrossEntropyLoss
-from torch.optim import Adam
+from torch.optim import SGD
+from torch.optim.lr_scheduler import ReduceLROnPlateau
 from torch.utils.data import random_split, DataLoader
 
 from model import run_device
@@ -42,9 +43,10 @@ def run(action, root_dir, data_key, model_key, save_path):
         train_set, val_set = random_split(dataset, (int(0.8 * dataset_len), int(0.2 * dataset_len)))
         train_loader = DataLoader(train_set, batch_size=config.batch_size, shuffle=True)
         val_loader = DataLoader(val_set, batch_size=config.batch_size, shuffle=False)
-        optimizer = Adam(model.parameters(), lr=config.learning_rate)
+        optimizer = SGD(model.parameters(), lr=config.learning_rate, momentum=config.momentum)
+        scheduler = ReduceLROnPlateau(optimizer, 'min', min_lr=config.min_learning_rate, patience=5)
         makedirs(save_path, exist_ok=True)
-        train(model, train_loader, val_loader, criterion, optimizer, config.num_epochs, model_path)
+        train(model, train_loader, val_loader, criterion, optimizer, scheduler, config.num_epochs, model_path)
     else:
         logging.info("Testing the model: {} with dataset: {}".format(model_key, data_key))
         model = torch.load(model_path)

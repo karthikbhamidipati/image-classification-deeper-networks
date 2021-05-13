@@ -11,6 +11,7 @@ from model.run import run
 
 def init_logger(args):
     logging.getLogger("torch").setLevel(logging.ERROR)
+    logging.getLogger("torchvision").setLevel(logging.ERROR)
     log = logging.getLogger('')
     log.setLevel(logging.INFO)
     formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")

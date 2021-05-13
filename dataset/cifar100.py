@@ -3,11 +3,20 @@ from torchvision.datasets import CIFAR100
 
 
 def cifar100(root_dir, train):
-    transform = transforms.Compose(
-        [
-            transforms.ToTensor(),
-            transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225), inplace=True)
-        ]
-    )
+    # Normalize the training set with augmentation
+    transform_train = transforms.Compose([
+        transforms.RandomCrop(32, padding=4),
+        transforms.RandomHorizontalFlip(),
+        transforms.ToTensor(),
+        transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
+    ])
+
+    # Normalize the test set same as training set without augmentation
+    transform_test = transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
+    ])
+
+    transform = transform_train if train else transform_test
 
     return CIFAR100(root=root_dir, train=train, download=True, transform=transform)
