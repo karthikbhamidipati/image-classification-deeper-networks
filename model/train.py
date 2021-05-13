@@ -27,7 +27,7 @@ def train_model(model, train_loader, criterion, optimizer):
     return metrics.asdict()
 
 
-def train(model, train_loader, val_loader, criterion, optimizer, num_epochs, model_path):
+def train(model, train_loader, val_loader, criterion, optimizer, scheduler, num_epochs, model_path):
     # wandb.watch(model, log='all')
     val_loss_min = Inf
 
@@ -35,6 +35,7 @@ def train(model, train_loader, val_loader, criterion, optimizer, num_epochs, mod
         train_metrics = train_model(model, train_loader, criterion, optimizer)
         val_metrics = predict(model, val_loader, criterion)
         log_metrics(epoch, train_metrics, val_metrics)
+        scheduler.step(val_metrics['loss'])
         val_loss_min = save_model(model, model_path, val_metrics['loss'], val_loss_min)
 
     wandb.save(model_path)
