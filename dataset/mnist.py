@@ -3,6 +3,8 @@ import urllib
 from torchvision import transforms
 from torchvision.datasets import MNIST
 
+from dataset.utils import get_dataset
+
 
 def mnist(root_dir, train):
     # Normalize the training set with augmentation
@@ -25,11 +27,10 @@ def mnist(root_dir, train):
         ]
     )
 
-    transform = transform_train if train else transform_test
-
     opener = urllib.request.URLopener()
     opener.addheader('User-Agent',
                      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 '
                      '(KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36')
 
-    return MNIST(root=root_dir, train=train, download=True, transform=transform)
+    dataset = MNIST(root=root_dir, train=train, download=True)
+    return get_dataset(dataset, train, transform_test, transform_train)

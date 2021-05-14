@@ -19,7 +19,7 @@ class TestNetwork(unittest.TestCase):
         cls.datasets = dict()
         for name, dataset in DATA_SOURCES.items():
             logging.info("Downloading {} dataset before running tests".format(name))
-            cls.datasets[name] = dataset(root_dir=cls.root_dir, train=True)
+            cls.datasets[name] = dataset(root_dir=cls.root_dir, train=False)
 
     @parameterized.expand(NETWORKS.keys())
     def test(self, name):
