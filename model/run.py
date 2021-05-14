@@ -44,7 +44,7 @@ def run(action, root_dir, data_key, model_key, save_path):
         train_loader = DataLoader(train_set, batch_size=config.batch_size, shuffle=True)
         val_loader = DataLoader(val_set, batch_size=config.batch_size, shuffle=False)
         optimizer = SGD(model.parameters(), lr=config.learning_rate, momentum=config.momentum)
-        scheduler = ReduceLROnPlateau(optimizer, 'min', min_lr=config.min_learning_rate, patience=5)
+        scheduler = ReduceLROnPlateau(optimizer, 'min', min_lr=config.min_learning_rate, patience=10)
         makedirs(save_path, exist_ok=True)
         train(model, train_loader, val_loader, criterion, optimizer, scheduler, config.num_epochs, model_path)
     else:
