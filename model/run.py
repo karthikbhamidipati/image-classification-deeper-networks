@@ -7,7 +7,7 @@ import wandb
 from torch.nn import CrossEntropyLoss
 from torch.optim import SGD
 from torch.optim.lr_scheduler import ReduceLROnPlateau
-from torch.utils.data import random_split, DataLoader
+from torch.utils.data import DataLoader
 
 from model import run_device
 from model.config import DATA_SOURCES, NETWORKS, PROJECT_NAME, HYPER_PARAMETERS
@@ -27,20 +27,17 @@ def get_dataset(data_key, root_dir, training):
 
 
 def run(action, root_dir, data_key, model_key, save_path):
-    training = action == 'train'
     run_name = "_".join((model_key, data_key))
     config = init_wandb_session(run_name, action)
 
-    dataset = get_dataset(data_key, root_dir, training)
     criterion = CrossEntropyLoss()
-    dataset_len = len(dataset)
     model_path = join(save_path, run_name + '.pt')
 
-    if training:
+    if action == 'train':
         logging.info("Training the model: {} with dataset: {}".format(model_key, data_key))
-        model = NETWORKS[model_key](input_filters=dataset[0][0].shape[0], num_classes=len(dataset.classes))
+        train_set, val_set = get_dataset(data_key, root_dir, True)
+        model = NETWORKS[model_key](input_filters=train_set[0][0].shape[0], num_classes=len(train_set.classes))
         model.to(run_device)
-        train_set, val_set = random_split(dataset, (int(0.8 * dataset_len), int(0.2 * dataset_len)))
         train_loader = DataLoader(train_set, batch_size=config.batch_size, shuffle=True)
         val_loader = DataLoader(val_set, batch_size=config.batch_size, shuffle=False)
         optimizer = SGD(model.parameters(), lr=config.learning_rate, momentum=config.momentum)
@@ -50,6 +47,7 @@ def run(action, root_dir, data_key, model_key, save_path):
     else:
         logging.info("Testing the model: {} with dataset: {}".format(model_key, data_key))
         model = torch.load(model_path)
-        test_loader = DataLoader(dataset, batch_size=config.batch_size, shuffle=False)
+        test_set = get_dataset(data_key, root_dir, False)
+        test_loader = DataLoader(test_set, batch_size=config.batch_size, shuffle=False)
         metrics = predict(model, test_loader, criterion)
         log_pred_metrics(metrics)

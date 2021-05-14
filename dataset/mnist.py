@@ -1,7 +1,10 @@
 import urllib
 
+from torch.utils.data import random_split
 from torchvision import transforms
 from torchvision.datasets import MNIST
+
+from dataset.wrapper import DatasetWrapper
 
 
 def mnist(root_dir, train):
@@ -25,11 +28,14 @@ def mnist(root_dir, train):
         ]
     )
 
-    transform = transform_train if train else transform_test
-
     opener = urllib.request.URLopener()
     opener.addheader('User-Agent',
                      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 '
                      '(KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36')
 
-    return MNIST(root=root_dir, train=train, download=True, transform=transform)
+    dataset = MNIST(root=root_dir, train=train, download=True)
+    if train:
+        train_set, val_set = random_split(dataset, (int(0.8 * len(dataset)), int(0.2 * len(dataset))))
+        return DatasetWrapper(train_set, transform_train), DatasetWrapper(val_set, transform_test)
+    else:
+        return DatasetWrapper(dataset, transform_test)
