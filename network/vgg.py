@@ -9,7 +9,7 @@ def _get_vgg_model(vgg_model, input_filters, num_classes):
                                    stride=conv1.stride, padding=conv1.padding, bias=False)
     vgg_model.classifier[-1] = Linear(in_features=fc.in_features, out_features=num_classes,
                                       bias=True)
-    return DataParallel(vgg_model, device_ids=[1, 2, 3])
+    return DataParallel(vgg_model)
 
 
 def vgg11(input_filters, num_classes):

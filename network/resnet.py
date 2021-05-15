@@ -9,7 +9,7 @@ def _get_resnet_model(resnet_model, input_filters, num_classes):
                                 stride=conv1.stride, padding=conv1.padding, bias=False)
     resnet_model.fc = Linear(in_features=fc.in_features, out_features=num_classes,
                              bias=True)
-    return DataParallel(resnet_model, device_ids=[1, 2, 3])
+    return DataParallel(resnet_model)
 
 
 def resnet18(input_filters, num_classes):
