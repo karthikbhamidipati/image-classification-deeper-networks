@@ -29,9 +29,9 @@ NETWORKS = {
 }
 
 HYPER_PARAMETERS = {
-    'num_epochs': 25,  # number of epochs
-    'batch_size': 4096,  # batch size
-    'learning_rate': 0.05,  # learning rate
+    'num_epochs': 50,  # number of epochs
+    'batch_size': 1536,  # batch size
+    'learning_rate': 0.02,  # learning rate
     'momentum': 0.9,  # Momentum of optimizer
-    'min_learning_rate': 0.001  # minimum learning rate
+    'min_learning_rate': 0.002  # minimum learning rate
 }

@@ -12,7 +12,7 @@ def _get_googlenet_model(googlenet_model, input_filters, num_classes):
                                       bias=True)
     googlenet_model.fc = Linear(in_features=1024, out_features=num_classes,
                                 bias=True)
-    return DataParallel(googlenet_model)
+    return DataParallel(googlenet_model, device_ids=[1, 2, 3])
 
 
 def googlenet(input_filters, num_classes):
