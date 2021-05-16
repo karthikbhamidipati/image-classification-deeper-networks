@@ -3,6 +3,7 @@ import logging
 import torch
 import wandb
 from numpy import Inf
+from torch.nn import DataParallel
 from torchvision.models import GoogLeNetOutputs
 
 from model import run_device
@@ -52,7 +53,10 @@ def train(model, train_loader, val_loader, criterion, optimizer, scheduler, num_
 def save_model(model, model_path, val_loss, val_loss_min):
     if val_loss <= val_loss_min:
         logging.info("Validation loss decreased ({:.6f} --> {:.6f}).  Saving model ...".format(val_loss_min, val_loss))
-        torch.save(model.module, model_path)
+        if isinstance(model, DataParallel):
+            torch.save(model.module, model_path)
+        else:
+            torch.save(model, model_path)
 
     return min(val_loss, val_loss_min)
 
