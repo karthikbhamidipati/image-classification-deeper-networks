@@ -3,6 +3,7 @@ import logging
 import torch
 import wandb
 from numpy import Inf
+from torchvision.models import GoogLeNetOutputs
 
 from model import run_device
 from model.metrics import Metrics
@@ -18,8 +19,15 @@ def train_model(model, train_loader, criterion, optimizer):
 
         optimizer.zero_grad()
         output = model(data)
-        loss = criterion(output, label)
-        loss.backward()
+        if isinstance(output, GoogLeNetOutputs):
+            loss = 0
+            for idx, googlenet_output in enumerate(output):
+                loss = criterion(googlenet_output, label)
+                loss.backward(retain_graph=idx < 2)
+            output = output[0]
+        else:
+            loss = criterion(output, label)
+            loss.backward()
         optimizer.step()
 
         metrics.update(loss, output, label)
