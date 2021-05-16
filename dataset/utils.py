@@ -2,7 +2,7 @@ from torch.utils.data import Dataset, random_split
 
 
 class DatasetWrapper(Dataset):
-    def __init__(self, dataset, num_classes, transform=None):
+    def __init__(self, dataset, num_classes, transform):
         self.dataset = dataset
         self.classes = num_classes
         self.transform = transform
@@ -22,4 +22,4 @@ def get_dataset(dataset, train, transform_test, transform_train):
         return DatasetWrapper(train_set, num_classes, transform_train), DatasetWrapper(val_set, num_classes,
                                                                                        transform_test)
     else:
-        return DatasetWrapper(dataset, transform_test)
+        return DatasetWrapper(dataset, num_classes, transform_test)

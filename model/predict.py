@@ -2,6 +2,7 @@ import logging
 
 import torch
 import wandb
+from torchvision.models import GoogLeNetOutputs
 
 from model import run_device
 from model.metrics import Metrics
@@ -15,6 +16,8 @@ def predict(model, data_loader, criterion):
         for data, labels in data_loader:
             data, label = data.to(run_device), labels.to(run_device)
             output = model(data)
+            if isinstance(output, GoogLeNetOutputs):
+                output = output[0]
             loss = criterion(output, label)
             metrics.update(loss, output, label)
 
